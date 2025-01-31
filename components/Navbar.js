@@ -18,12 +18,12 @@ export default function Navbar() {
       <nav className="bg-blue-500 text-white p-4 flex justify-between items-center shadow-md">
         <h1 className="text-lg font-bold cursor-pointer">Collaborative Notes</h1>
         <div className="flex items-center gap-4">
-          <button
+          {/* <button
             className="bg-white text-blue-500 py-2 px-4 rounded hover:bg-gray-200"
             onClick={() => setIsModalOpen(true)}
           >
             Create Note
-          </button>
+          </button> */}
           <button
             className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
             onClick={handleLogout}
@@ -33,9 +33,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {isModalOpen && (
-        <NoteModal onClose={() => setIsModalOpen(false)} />
-      )}
     </>
   );
 }

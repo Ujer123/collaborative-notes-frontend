@@ -29,9 +29,7 @@ export default function NoteModal({ onClose }) {
         "/notes",
         { title, content, owner },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
 
