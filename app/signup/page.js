@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import api from "@/utils/api"; // Use the correct import
+import api from "@/utils/api"; 
 
 export default function Signup() {
   const [name, setName] = useState("");

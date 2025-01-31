@@ -2,26 +2,26 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import api from "@/utils/api"; // Correct import for Axios instance
+import api from "@/utils/api"; 
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState(null); // For error handling
+  const [loginError, setLoginError] = useState(null); 
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoginError(null); // Clear any previous errors
+    setLoginError(null); 
 
     try {
-      const { data } = await api.post("/auth/login", { email, password }); // Use the pre-configured Axios instance
+      const { data } = await api.post("/auth/login", { email, password }); 
       localStorage.setItem("token", data.token);
-      router.push("/dashboard"); // Redirect to dashboard
+      router.push("/dashboard"); 
     } catch (error) {
       console.error("Login failed:", error);
       if (error.response) {
-        setLoginError(error.response.data.message || "Login failed."); // Show server error message
+        setLoginError(error.response.data.message || "Login failed."); 
       } else if (error.request) {
         setLoginError("No response from server. Please try again.");
       } else {
@@ -35,7 +35,7 @@ export default function Login() {
       <form onSubmit={handleLogin} className="bg-white p-6 rounded shadow-md w-80">
         <h1 className="text-2xl font-bold mb-4">Log In</h1>
 
-        {loginError && <p className="text-red-500 mb-4">{loginError}</p>} {/* Display error message */}
+        {loginError && <p className="text-red-500 mb-4">{loginError}</p>} 
 
         <input
           type="email"

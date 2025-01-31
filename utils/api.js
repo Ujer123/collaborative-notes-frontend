@@ -3,9 +3,9 @@ import axios from "axios";
 let baseURL;
 
 if (process.env.NODE_ENV === 'development') {
-  baseURL = "http://localhost:5000/api";  // Development URL
+  baseURL = "http://localhost:5000/api";  
 } else {
-  baseURL = "https://workverse-backend.onrender.com/api"; // Production URL
+  baseURL = "https://workverse-backend.onrender.com/api"; 
 }
 
 
@@ -15,7 +15,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // VERY IMPORTANT if using cookies/sessions!
+  withCredentials: true,
 });
 
 export default api;
