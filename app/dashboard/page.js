@@ -7,7 +7,7 @@ import NoteCard from "@/components/NoteCard";
 import { useRouter } from "next/navigation";
 import NoteForm from "@/components/NoteForm";
 import { jwtDecode } from "jwt-decode";
-
+import { io } from "socket.io-client";
 
 
 export default function Dashboard() {
@@ -20,6 +20,8 @@ export default function Dashboard() {
     id: "",
     email: "",
   })
+  const [socket, setSocket] = useState(null);
+
   
     useEffect(() => {
       const token = localStorage.getItem('token');
@@ -39,6 +41,32 @@ export default function Dashboard() {
         router.push('/login');
       }
     }, [router]);
+
+    // Set up socket connection
+    useEffect(() => {
+      if (!currentUser.id) return;
+    
+      const newSocket = io(
+        process.env.NODE_ENV === "development" 
+          ? "http://localhost:5000" 
+          : "https://workverse-backend.onrender.com/api",
+        { transports: ['websocket'], withCredentials: true }
+      );
+      
+      setSocket(newSocket);
+    
+      newSocket.emit("join-user", currentUser.id);
+    
+      newSocket.on("note-updated", (updatedNote) => {
+        setNotes(prevNotes => prevNotes.map(note => 
+          note._id === updatedNote._id ? updatedNote : note
+        ));
+      });
+    
+      return () => {
+        newSocket.disconnect();
+      };
+    }, [currentUser.id]);
 
       const fetchNotes = async () => {
         try {
@@ -85,6 +113,9 @@ export default function Dashboard() {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           }
         );
+        // if (socket) {
+        //   socket.emit("update-note", {noteId: note._id, updatedContent: data});
+        // }
         setNotes((prevNotes) =>
           prevNotes.map((n) => (n._id === data._id ? data : n))
         );
@@ -164,7 +195,6 @@ export default function Dashboard() {
        const sharedUserId = sw.user?._id ? sw.user._id.toString() : sw.user?.toString();
     return sharedUserId === currentUser.id;
     });
-    console.log("Is Shared:", isShared);
   
     if (filter === "created") {
       return matchesSearch && !isOwner && !isShared;
